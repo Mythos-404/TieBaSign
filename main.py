@@ -1,15 +1,14 @@
 # -*- coding:utf-8 -*-
-import os
-import requests
-import hashlib
-import time
 import copy
+import hashlib
 import logging
+import os
 import random
+import time
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
+import requests
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # API_URL
@@ -21,7 +20,7 @@ ENV = os.environ
 
 HEADERS = {
     "Host": "tieba.baidu.com",
-    "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:127.0) Gecko/20100101 Firefox/127.0",
 }
 SIGN_DATA = {
     "_client_type": "2",
@@ -123,9 +122,7 @@ def get_favorite(bduss):
         if "forum_list" not in res:
             continue
         if "non-gconforum" in res["forum_list"]:
-            returnData["forum_list"]["non-gconforum"].append(
-                res["forum_list"]["non-gconforum"]
-            )
+            returnData["forum_list"]["non-gconforum"].append(res["forum_list"]["non-gconforum"])
         if "gconforum" in res["forum_list"]:
             returnData["forum_list"]["gconforum"].append(res["forum_list"]["gconforum"])
 
@@ -168,9 +165,7 @@ def client_sign(bduss, tbs, fid, kw):
     # 客户端签到
     logger.info("开始签到贴吧：" + "*" * len(kw))
     data = copy.copy(SIGN_DATA)
-    data.update(
-        {BDUSS: bduss, FID: fid, KW: kw, TBS: tbs, TIMESTAMP: str(int(time.time()))}
-    )
+    data.update({BDUSS: bduss, FID: fid, KW: kw, TBS: tbs, TIMESTAMP: str(int(time.time()))})
     data = encodeData(data)
     res = s.post(url=SIGN_URL, data=data, timeout=5).json()
     return res
@@ -186,8 +181,8 @@ def main():
         tbs = get_tbs(i)
         favorites = get_favorite(i)
         for j in favorites:
-            time.sleep(random.randint(1, 5))
             client_sign(i, tbs, j["id"], j["name"])
+            time.sleep(random.randint(2, 4))
         logger.info("完成第" + str(n) + "个用户签到")
     logger.info("所有用户签到结束")
 

@@ -14,8 +14,8 @@ jobs:
             - uses: actions/checkout@v4
             - uses: actions/setup-python@v5
               with:
-                  python-version: "3.12.2"
-            - run: python -m pip install --upgrade requests
+                  python-version: "3.12.3"
+            - run: python -m pip install requests
             - name: "开始签到"
               env:
                   BDUSS: ${{ secrets.BDUSS }}
